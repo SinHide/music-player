@@ -1,16 +1,23 @@
 <template>
   <div id="app">
     <MHeader></MHeader>
+    <Tab></Tab>
+    <!-- keep-alive可以缓存数据 -->
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
   import MHeader from 'components/m-header/m-header'
+  import Tab from 'components/tab/tab'
 
   export default {
     name: 'app',
     components: {
-      MHeader
+      MHeader,
+      Tab
     }
   }
 </script>

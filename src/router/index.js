@@ -1,15 +1,32 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import VueRouter from 'vue-router'
 
-Vue.use(Router)
+import Singer from 'components/singer/singer'
+import Rank from 'components/rank/rank'
+import Search from 'components/search/search'
+const Recommend = () => import('components/recommend/recommend')
 
-export default new Router({
+Vue.use(VueRouter)
+
+const router = new VueRouter({
   routes: [
     {
-      path: '/',
-      name: 'Hello',
-      component: HelloWorld
+      path: '/recommend',
+      component: Recommend
+    },
+    {
+      path: '/singer',
+      component: Singer
+    },
+    {
+      path: '/rank',
+      component: Rank
+    },
+    {
+      path: '/search',
+      component: Search
     }
   ]
 })
+
+export default router
