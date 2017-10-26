@@ -1,15 +1,20 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Singer from 'components/singer/singer'
-import Rank from 'components/rank/rank'
-import Search from 'components/search/search'
 const Recommend = () => import('components/recommend/recommend')
+const Singer = () => import('components/singer/singer')
+const Rank = () => import('components/rank/rank')
+const Search = () => import('components/search/search')
 
 Vue.use(VueRouter)
 
 const router = new VueRouter({
+  // redirect: 重定向
   routes: [
+    {
+      path: '/',
+      redirect: '/Recommend'
+    },
     {
       path: '/recommend',
       component: Recommend
