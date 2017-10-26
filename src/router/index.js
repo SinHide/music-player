@@ -13,7 +13,7 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      redirect: '/Recommend'
+      redirect: '/recommend'
     },
     {
       path: '/recommend',
