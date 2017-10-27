@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <MHeader></MHeader>
-    <Tab></Tab>
+    <m-header></m-header>
+    <tab></tab>
     <!-- keep-alive可以缓存数据 -->
     <keep-alive>
       <router-view></router-view>
