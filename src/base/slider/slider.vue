@@ -49,9 +49,19 @@
           this._play()
         }
       }, 20)
+
+      // 窗口大小发生改变
+      window.addEventListener('resize', () => {
+        if (!this.slider) {
+          return
+        }
+        // 参数 true : 防止 width += 2 * sliderWidth 再执行一次
+        this._setSliderWidth(true)
+        this.slider.refresh()
+      })
     },
     methods: {
-      _setSliderWidth () {
+      _setSliderWidth (isResize) {
         this.children = this.$refs.sliderGroup.children
 
         let width = 0
@@ -64,7 +74,7 @@
           width += sliderWidth
         }
         // 左右各克隆一个 dom 保证循环播放 (实际上有3个slider-item)
-        if (this.loop) {
+        if (this.loop && !isResize) {
           width += 2 * sliderWidth
         }
         this.$refs.sliderGroup.style.width = width + 'px'
@@ -95,6 +105,11 @@
             pageIndex -= 1
           }
           this.curPageIndex = pageIndex
+
+          if (this.autoPlay) {
+            clearTimeout(this.timer)
+            this._play()
+          }
         })
       },
       _play () {
