@@ -6,6 +6,7 @@
       </slot>
     </div>
     <div class="dots">
+      <span class="dot" v-for="(item,index) in dots" :class="{active: curPageIndex === index}"></span>
     </div>
   </div>
 </template>
@@ -16,6 +17,12 @@
 
   export default {
     name: 'slider',
+    data () {
+      return {
+        dots: [],
+        curPageIndex: 0
+      }
+    },
     props: {
       loop: {
         type: Boolean,
@@ -35,7 +42,12 @@
       setTimeout(() => {
         // mounted 时 slot 中的 dom 不一定插入进来了 -> recommend.js 中 getRecommend是个异步操作
         this._setSliderWidth()
+        this._initDots()
         this._initSlider()
+
+        if (this.autoPlay) {
+          this._play()
+        }
       }, 20)
     },
     methods: {
@@ -57,6 +69,9 @@
         }
         this.$refs.sliderGroup.style.width = width + 'px'
       },
+      _initDots () {
+        this.dots = new Array(this.children.length)
+      },
       _initSlider () {
         // github better-scroll
         this.slider = new BScroll(this.$refs.slider, {
@@ -69,6 +84,29 @@
           snapSpeed: 400,
           click: true
         })
+
+        this.slider.on('scrollEnd', () => {
+          let pageIndex = this.slider.getCurrentPage().pageX
+          // 循环模式下 默认第一个元素会添加一个拷贝
+          // pageIndex : 1 , 2 , 3 , 4 , 5
+          // this.children.length = 5
+          // index : 4 , 0 , 1 , 2 , 3 , 4 , 0
+          if (this.loop) {
+            pageIndex -= 1
+          }
+          this.curPageIndex = pageIndex
+        })
+      },
+      _play () {
+        // curPageIndex 从 0 开始，pageIndex 从 1 开始
+        let pageIndex = this.curPageIndex + 1
+        if (this.loop) {
+          pageIndex += 1
+        }
+        this.timer = setTimeout(() => {
+          // 0 : 表示 y 方向，不需要轮播传入 0
+          this.slider.goToPage(pageIndex, 0, 400)
+        }, this.interval)
       }
     }
   }
