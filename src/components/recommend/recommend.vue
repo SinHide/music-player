@@ -1,6 +1,6 @@
 <template>
   <div class="recommend">
-    <scroll class="recommend-content" :data="discList">
+    <scroll ref="scroll" class="recommend-content" :data="discList">
       <!-- 传入data scroll组件内就能 watch到data变化从而触发refresh方法 -->
       <!-- better-scroll 只处理容器（wrapper）的第一个子元素（content）的滚动，其它的元素都会被忽略 -->
       <div>
@@ -9,7 +9,8 @@
           <slider>
             <div v-for="item in recommends">
               <a :href="item.linkUrl">
-                <img :src="item.picUrl">
+                <!-- loadImage 保证slider高度一定被图片撑开了 -->
+                <img @load="loadImage" :src="item.picUrl">
               </a>
             </div>
           </slider>
@@ -64,6 +65,12 @@
             this.discList = res.data.list
           }
         })
+      },
+      loadImage () {
+        if (!this.checkLoad) {
+          this.$refs.scroll.refresh()
+          this.checkLoad = true
+        }
       }
     },
     components: {
