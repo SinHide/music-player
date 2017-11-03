@@ -10,7 +10,8 @@
             <div v-for="item in recommends">
               <a :href="item.linkUrl">
                 <!-- loadImage 保证slider高度一定被图片撑开了 -->
-                <img @load="loadImage" :src="item.picUrl">
+                <!-- fastclick 监听到img这个target dom上的点击事件，如果dom上有needsclick的class，就不会拦截点击过程 -->
+                <img class="needsclick" @load="loadImage" :src="item.picUrl">
               </a>
             </div>
           </slider>
@@ -20,7 +21,8 @@
           <ul>
             <li v-for="item in discList" class="item">
               <div class="icon">
-                <img :src="item.imgurl" width="60" height="60">
+                <!-- v-lazy 指令 -->
+                <img v-lazy="item.imgurl" width="60" height="60">
               </div>
               <div class="text">
                 <h2 class="name" v-html="item.creator.name"></h2>
