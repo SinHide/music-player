@@ -45,6 +45,13 @@
       },
       refresh () {
         this.scroll && this.scroll.refresh()
+      },
+      scrollTo () {
+        // apply: 把 arguments 传入 scrollTo 里
+        this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
+      },
+      scrollToElement () {
+        this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
       }
     },
     watch: {
