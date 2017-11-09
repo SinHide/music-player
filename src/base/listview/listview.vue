@@ -105,17 +105,26 @@
         }, 20)
       },
       scrollY (newY) {
+        // 拖拽到最顶部的时候 newY会从一个较大的正值 下降成一个较小的正值
+        // 拖拽到最底部的时候 newY会从一个较大的负值 回升成一个较小的负值
         const listHeight = this.listHeight
-        for (let i = 0; i < listHeight.length; i++) {
+        // 当滚动到顶部，newY > 0
+        if (newY > 0) {
+          this.curIndex = 0
+          return
+        }
+        // 在中间部分滚动
+        for (let i = 0; i < listHeight.length - 1; i++) {
           let heightLowLimit = listHeight[i] // 下限
           let heightUpLimit = listHeight[i + 1] // 上限
           // 向下滚动时 newY是个负值
-          if (!heightUpLimit || (-newY > heightLowLimit && -newY < heightUpLimit)) {
+          if (-newY >= heightLowLimit && -newY < heightUpLimit) {
             this.curIndex = i
             return
           }
         }
-        this.curIndex = 0
+        // 当滚动到底部，且 -newY 大于最后一个元素的上限
+        this.curIndex = listHeight.length - 2
       }
     },
     components: {
