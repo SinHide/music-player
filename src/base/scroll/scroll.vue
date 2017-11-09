@@ -20,6 +20,10 @@
       data: { // 数据
         type: Array,
         default: null
+      },
+      listenScroll: { // 是否监听滚动事件
+        type: Boolean,
+        default: false
       }
     },
     mounted () {
@@ -36,6 +40,13 @@
           probeType: this.probeType,
           click: this.click
         })
+
+        if (this.listenScroll) {
+          let _this = this // _this: vm
+          this.scroll.on('scroll', (pos) => {
+            _this.$emit('scroll', pos)
+          })
+        }
       },
       enable () {
         this.scroll && this.scroll.enable()
@@ -47,7 +58,6 @@
         this.scroll && this.scroll.refresh()
       },
       scrollTo () {
-        // apply: 把 arguments 传入 scrollTo 里
         this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
       },
       scrollToElement () {
