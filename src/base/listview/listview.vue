@@ -26,17 +26,22 @@
         </li>
       </ul>
     </div>
-    <div class="list-fixed" v-show="fixedTitle">
+    <div class="list-fixed" v-show="fixedTitle" ref="fixed">
       <h1 class="fixed-title">{{fixedTitle}}</h1>
+    </div>
+    <div v-show="!data.length" class="loading-container">
+      <loading></loading>
     </div>
   </scroll>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
   import {getData} from 'common/js/dom'
 
   const ANCHOR_HEIGHT = 18 // 样式定义的
+  const TITLE_HEIGHT = 30
 
   export default {
     // 写在 created 而不在 data () 原因：不需要观测 touch 对象的变化
@@ -49,7 +54,8 @@
     data () {
       return {
         scrollY: -1,
-        curIndex: 0
+        curIndex: 0,
+        diff: -1
       }
     },
     props: {
@@ -141,15 +147,26 @@
           // 向下滚动时 newY是个负值
           if (-newY >= heightLowLimit && -newY < heightUpLimit) {
             this.curIndex = i
+            this.diff = heightUpLimit + newY
             return
           }
         }
         // 当滚动到底部，且 -newY 大于最后一个元素的上限
         this.curIndex = listHeight.length - 2
+      },
+      diff (newVal) {
+        let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0
+        if (this.fixedTop === fixedTop) {
+          // 减少 dom 操作，避免频繁的 transform
+          return
+        }
+        this.fixedTop = fixedTop
+        this.$refs.fixed.style.transform = `translate3d(0, ${fixedTop}px, 0)`
       }
     },
     components: {
-      Scroll
+      Scroll,
+      Loading
     }
   }
 </script>
