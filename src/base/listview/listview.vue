@@ -84,6 +84,17 @@
         this.scrollY = pos.y
       },
       _scrollTo (index) {
+        // 边界条件处理
+        // touch事件：右侧快捷栏上下部分有圆帽型空白 index 为 null
+        if (!index && index !== 0) return
+        // touchmove事件
+        if (index < 0) {
+          index = 0
+        } else if (index > this.listHeight.length - 2) {
+          index = this.listHeight.length - 2
+        }
+        // 每个listHeight 的上限的位置
+        this.scrollY = -this.listHeight[index]
         this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
       },
       _calculateHeight () {
