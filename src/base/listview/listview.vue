@@ -26,6 +26,9 @@
         </li>
       </ul>
     </div>
+    <div class="list-fixed" v-show="fixedTitle">
+      <h1 class="fixed-title">{{fixedTitle}}</h1>
+    </div>
   </scroll>
 </template>
 
@@ -60,6 +63,13 @@
         return this.data.map(group => {
           return group.title.substr(0, 1)
         })
+      },
+      fixedTitle () {
+        // 拖拽到最上方 出现两个 title 的情况
+        if (this.scrollY > 0) {
+          return ''
+        }
+        return this.data[this.curIndex] ? this.data[this.curIndex].title : ''
       }
     },
     methods: {
