@@ -7,7 +7,7 @@
         <!-- v-if 解决 slider 中 mounted 执行时 v-for 渲染的数据一定已经存在 -->
         <div v-if="recommends.length" class="slider-wrapper">
           <slider>
-            <div v-for="item in recommends">
+            <div v-for="(item,index) in recommends" :key="index">
               <a :href="item.linkUrl">
                 <!-- loadImage 保证slider高度一定被图片撑开了 -->
                 <!-- fastclick 监听到img这个target dom上的点击事件，如果dom上有needsclick的class，就不会拦截点击过程 -->
@@ -19,7 +19,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li v-for="item in discList" class="item">
+            <li v-for="(item,index) in discList" :key="index" class="item">
               <div class="icon">
                 <!-- v-lazy 指令 -->
                 <img v-lazy="item.imgurl" width="60" height="60">

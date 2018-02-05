@@ -30,6 +30,7 @@
           path: `/singer/${singer.id}`
         })
         this.setSinger(singer)
+        localStorage.setItem('singer', JSON.stringify(singer))
       },
       _getSingerList () {
         getSingerList().then(res => {

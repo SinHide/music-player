@@ -5,10 +5,16 @@
           :probeType="probeType"
           @scroll="scroll">
     <ul>
-      <li v-for="group in data" class="list-group" ref="listGroup">
+      <li v-for="(group,listIndex) in data" 
+          :key="listIndex"
+          class="list-group" 
+          ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
-          <li v-for="item in group.items" @click="selectItem(item)" class="list-group-item">
+          <li v-for="(item,index) in group.items"
+              :key="index"
+              @click="selectItem(item)" 
+              class="list-group-item">
             <img class="avatar" v-lazy="item.avatar">
             <span class="name">{{item.name}}</span>
           </li>
@@ -21,6 +27,7 @@
       <ul>
         <li v-for="(item,index) in shortcutList" class="item"
             :data-index="index"
+            :key="index"
             :class="{'current': curIndex === index}">
           {{item}}
         </li>

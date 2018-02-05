@@ -19,28 +19,25 @@
     },
     computed: {
       title () {
-        return this.singer.name
+        return this.singer.name || this.singerInfo.name
       },
       bgImage () {
-        return this.singer.avatar
+        return this.singer.avatar || this.singerInfo.avatar
       },
       ...mapGetters([
         'singer'
       ])
     },
     created () {
+      this.singerInfo = JSON.parse(localStorage.getItem('singer'))
       this._getSingerDetail()
     },
     methods: {
       _getSingerDetail () {
-        if (!this.singer.id) {
-          this.$router.push('/singer')
-          return
-        }
-        getSingerDetail(this.singer.id).then(res => {
+        let singerId = this.singer.id || this.singerInfo.id
+        getSingerDetail(singerId).then(res => {
           if (res.code === ERR_OK) {
             this.songs = this._normalizeSongs(res.data.list)
-            console.warn(this.songs)
           }
         })
       },
