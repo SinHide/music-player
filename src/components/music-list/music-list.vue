@@ -12,7 +12,7 @@
             :probe-type="probeType"
             :listen-scroll="listenScroll"
             :data="songs"
-            class="list" 
+            class="list"
             ref="list">
       <div class="song-list-wrapper">
         <song-list :songs="songs"></song-list>
@@ -24,6 +24,8 @@
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
   import SongList from 'base/song-list/song-list'
+
+  const RESERVED_HEIGHT = 40
 
   export default {
     props: {
@@ -55,6 +57,8 @@
       this.listenScroll = true
     },
     mounted () {
+      this.imageHeight = this.$refs.bgImage.clientHeight // 用于设置最大滚动距离
+      this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT // 最小滚动Y值（最大滚动Y轴距离）
       this.$refs.list.$el.style.top = `${this.$refs.bgImage.clientHeight}px`
     },
     methods: {
@@ -63,6 +67,14 @@
       },
       back () {
         this.$router.back()
+      }
+    },
+    watch: {
+      scrollY (newY) {
+        // 需要设置一个最大滚动距离
+        let translateY = Math.max(this.minTranslateY, newY)
+        this.$refs.layer.style['transform'] = `translate3d(0, ${translateY}px, 0)`
+        this.$refs.layer.style['webkitTransform'] = `translate3d(0, ${translateY}px, 0)`
       }
     },
     components: {
