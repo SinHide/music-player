@@ -35,7 +35,9 @@
   import SongList from 'base/song-list/song-list'
   import Loading from 'base/loading/loading'
   import { prefixStyle } from 'common/js/dom'
-  import { mapActions } from 'vuex'
+  import { getSongUrl } from 'api/song'
+  import {ERR_OK} from 'api/config'
+  import { mapActions, mapMutations } from 'vuex'
 
   const RESERVED_HEIGHT = 40
   const transform = prefixStyle('transform')
@@ -76,6 +78,14 @@
       this.$refs.list.$el.style.top = `${this.$refs.bgImage.clientHeight}px`
     },
     methods: {
+      _getSongUrl (songmid) {
+        getSongUrl(songmid).then(res => {
+          if (res.code === ERR_OK) {
+            this.songInfo = res.data.items
+            this.setSongUrl(this.songInfo[0])
+          }
+        })
+      },
       scroll (pos) {
         this.scrollY = pos.y
       },
@@ -83,6 +93,7 @@
         this.$router.back()
       },
       selectItem (item, index) {
+        this._getSongUrl(item.mid)
         this.selectPlay({
           list: this.songs,
           index
@@ -90,7 +101,10 @@
       },
       ...mapActions([
         'selectPlay'
-      ])
+      ]),
+      ...mapMutations({
+        setSongUrl: 'SET_SONG_URL'
+      })
     },
     watch: {
       scrollY (newY) {

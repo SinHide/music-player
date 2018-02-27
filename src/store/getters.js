@@ -15,3 +15,8 @@ export const currentIndex = state => state.currentIndex
 export const currentSong = (state) => {
   return state.playlist[state.currentIndex] || {}
 }
+
+export const songUrl = (state) => {
+  if (JSON.stringify(state.songUrl) === '{}') return ''
+  return `http://dl.stream.qqmusic.qq.com/${state.songUrl.filename}?vkey=${state.songUrl.vkey}&guid=6527976336&uin=0&fromtag=66`
+}

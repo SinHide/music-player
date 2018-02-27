@@ -62,6 +62,7 @@
         </div>
       </div>
     </transition>
+    <audio ref="audio" :src="songUrl"></audio>
   </div>
 </template>
 
@@ -77,7 +78,8 @@
       ...mapGetters([
         'fullScreen',
         'playlist',
-        'currentSong'
+        'currentSong',
+        'songUrl'
       ])
     },
     methods: {
@@ -147,6 +149,14 @@
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN'
       })
+    },
+    watch: {
+      songUrl () {
+        // 保证 audio 在请求到src之后才能调用play方法
+        this.$nextTick(() => {
+          this.$refs.audio.play()
+        })
+      }
     }
   }
 </script>
